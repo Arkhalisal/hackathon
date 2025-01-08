@@ -34,6 +34,13 @@ export default function DashboardPage() {
           <span>所有書籍</span>
         </Link>
 
+        <Link
+          className="absolute top-4 right-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-300"
+          href={"/"}
+        >
+          登出
+        </Link>
+
         {/* Search Bar */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 bg-white rounded-full p-2 px-4 flex-1">
