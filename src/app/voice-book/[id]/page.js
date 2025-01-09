@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Heart, SkipBack, Play, Pause, SkipForward, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -218,6 +218,18 @@ export default function VoiceBookPage() {
     }
   };
 
+  const handleBackward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime -= 5;
+    }
+  };
+
+  const handleForward = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime += 5;
+    }
+  };
+
   const addComment = () => {
     if (newComment.trim()) {
       const comment = {
@@ -284,7 +296,7 @@ export default function VoiceBookPage() {
 
           <div className="flex items-center gap-4">
             <button className="text-gray-600 hover:text-gray-800">
-              <SkipBack className="w-6 h-6" />
+              <SkipBack className="w-6 h-6" onClick={handleBackward} />
             </button>
             <button
               onClick={togglePlay}
@@ -293,7 +305,7 @@ export default function VoiceBookPage() {
               {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
             </button>
             <button className="text-gray-600 hover:text-gray-800">
-              <SkipForward className="w-6 h-6" />
+              <SkipForward className="w-6 h-6" onClick={handleForward} />
             </button>
           </div>
 
