@@ -96,7 +96,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-2 bg-white rounded-full p-2 px-4 flex-1">
             <Menu className="w-6 h-6 text-gray-500" />
-            <input type="search" placeholder="搜尋專案" className="flex-1 bg-transparent outline-none" />
+            <input type="search" placeholder="搜尋書本..." className="flex-1 bg-transparent outline-none" />
             <Search className="w-6 h-6 text-gray-500" />
           </div>
           <button
