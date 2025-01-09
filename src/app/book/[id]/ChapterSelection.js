@@ -18,7 +18,7 @@ export function ChapterSelection({ chapters, selectedChapter, onSelectChapter, i
           {chapters.map((chapter) => (
             <li
               key={chapter.number}
-              className={`px-4 py-2 hover:bg-gray-100 cursor-pointer ${
+              className={`px-4 py-2 hover:bg-gray-100 text-black cursor-pointer ${
                 chapter.isPremium && !isPremiumUser ? "opacity-50" : ""
               }`}
               onClick={() => {
