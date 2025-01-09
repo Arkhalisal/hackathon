@@ -288,7 +288,7 @@ export default function BookPage() {
 
         {/* Comments Section */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-black">
             <MessageSquare className="w-5 h-5" />
             評論
           </h3>
@@ -314,18 +314,18 @@ export default function BookPage() {
           <div className="space-y-4">
             {comments.map((comment) => (
               <div key={comment.id} className="flex gap-3">
-                <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-200">
                   <Image
                     src={comment.avatar}
                     alt={comment.user}
                     className="w-full h-full object-cover"
-                    width={32}
-                    height={32}
+                    width={40}
+                    height={40}
                   />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-medium">{comment.user}</span>
+                    <span className="font-medium text-black">{comment.user}</span>
                     <span className="text-sm text-gray-500">{comment.timestamp}</span>
                   </div>
                   <p className="text-gray-700">{comment.content}</p>

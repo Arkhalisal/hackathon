@@ -109,7 +109,7 @@ export default function DashboardPage() {
 
         {/* Profile Section */}
         <div className="mt-4 bg-gray-200 rounded-lg p-8 mx-4">
-          <h2 className="text-2xl font-semibold mb-4">Lam 的自傳</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-black">Lam 的自傳</h2>
           <p className="text-gray-600">這裡是 Lam 的個人簡介和故事...</p>
           <div className="mt-4 flex justify-between items-center">
             <div className="text-sm text-gray-500">最後更新: 2024-01-09</div>

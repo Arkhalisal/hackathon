@@ -301,7 +301,7 @@ export default function VoiceBookPage() {
             <div className="flex items-center space-x-4">
               <Image src={book.cover} alt={book.title} width={80} height={120} className="rounded-md shadow-md" />
               <div>
-                <h1 className="text-xl font-semibold mb-1">{book.title}</h1>
+                <h1 className="text-xl font-semibold mb-1 text-black">{book.title}</h1>
                 <p className="text-sm text-gray-500">作者：{book.author}</p>
               </div>
             </div>
@@ -374,7 +374,7 @@ export default function VoiceBookPage() {
         {/* Comments Section */}
         <div className="border-t">
           <div className="p-4">
-            <h3 className="text-lg font-semibold mb-4">評論</h3>
+            <h3 className="text-lg font-semibold mb-4 text-black">評論</h3>
 
             {/* Add Comment */}
             <div className="flex gap-2 mb-6">
@@ -405,7 +405,7 @@ export default function VoiceBookPage() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{comment.user}</span>
+                      <span className="font-medium text-black">{comment.user}</span>
                       <span className="text-sm text-gray-500">{comment.timestamp}</span>
                     </div>
                     <p className="text-gray-700">{comment.content}</p>
