@@ -1,36 +1,38 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
+import { Heart, SkipBack, Play, Pause, SkipForward, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { ArrowLeft, Heart, MessageSquare, Headphones } from "lucide-react";
 
-export default function BookPage() {
-  const router = useRouter();
+export default function VoiceBookPage() {
   const { id } = useParams();
-  const [book, setBook] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(36);
+  const [playbackRate, setPlaybackRate] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
   const [comments, setComments] = useState([
     {
       id: 1,
       user: "Alice",
       avatar: "/placeholder.svg?height=32&width=32",
-      content: "這本書真的很棒！推薦大家閱讀。",
+      content: "這本有聲書真的很棒！",
       timestamp: "2024-01-09 14:30",
     },
     {
       id: 2,
       user: "Bob",
       avatar: "/placeholder.svg?height=32&width=32",
-      content: "內容非常精彩，值得一讀。",
+      content: "朗讀者的聲音很舒服",
       timestamp: "2024-01-09 15:45",
     },
   ]);
   const [newComment, setNewComment] = useState("");
+  const [book, setBook] = useState(null);
+  const audioRef = useRef(null);
 
   useEffect(() => {
-    // In a real app, you would fetch the book data from an API
     const allBooks = [
       {
         id: 1,
@@ -46,6 +48,7 @@ export default function BookPage() {
         preview: "這部經典小說探討了愛情、婚姻、道德、教育等主題...",
         cover: "https://s.eslite.com/upload/product/o/2680416845006/ec327725.jpg",
       },
+
       {
         id: 3,
         title: "簡愛",
@@ -168,6 +171,53 @@ export default function BookPage() {
     setBook(foundBook || null);
   }, [id]);
 
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
+    }
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  const handleSliderChange = (e) => {
+    const value = parseFloat(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.currentTime = value;
+      setCurrentTime(value);
+    }
+  };
+
+  const handlePlaybackRateChange = () => {
+    const rates = [1, 1.5, 2, 0.5];
+    const currentIndex = rates.indexOf(playbackRate);
+    const nextRate = rates[(currentIndex + 1) % rates.length];
+    setPlaybackRate(nextRate);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = nextRate;
+    }
+  };
+
   const addComment = () => {
     if (newComment.trim()) {
       const comment = {
@@ -182,96 +232,118 @@ export default function BookPage() {
     }
   };
 
-  if (!book) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-3xl mx-auto">
-        <Link href="/all-books" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
-          <ArrowLeft className="w-5 h-5 mr-2" />
-          返回
-        </Link>
+      <Link href={`/book/${id}`} className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
+        <ArrowLeft className="w-5 h-5 mr-2" />
+        返回
+      </Link>
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+        {/* Audio Player */}
+        <audio ref={audioRef} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleLoadedMetadata} src="/demo.mp3" />
 
-        <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-          <div className="md:flex">
-            <div className="md:flex-shrink-0">
-              <Image
-                src={book.cover}
-                alt={book.title}
-                width={300}
-                height={400}
-                className="h-48 w-full object-cover md:h-full md:w-48"
-              />
-            </div>
-            <div className="p-8">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="block mt-1 text-lg leading-tight font-medium text-black">{book.title}</h2>
-                  <p className="mt-2 text-gray-500">{book.author}</p>
-                </div>
-                <button
-                  onClick={() => setIsFavorite(!isFavorite)}
-                  className={`p-2 rounded-full ${isFavorite ? "text-red-500" : "text-gray-400"}`}
-                >
-                  <Heart className="w-6 h-6" fill={isFavorite ? "currentColor" : "none"} />
-                </button>
-              </div>
-              <p className="mt-4 text-gray-600">{book.preview}</p>
-              <div className="mt-6">
-                <button
-                  onClick={() => router.push(`/voice-book/${id}`)}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                >
-                  <Headphones className="w-4 h-4" />
-                  開始閱讀
-                </button>
-              </div>
-            </div>
+        {/* Book Info */}
+        {book && (
+          <div className="p-4 bg-gray-50 border-b">
+            <h1 className="text-xl font-semibold mb-1">{book.title}</h1>
+            <h2 className="text-gray-600 mb-1">書本封面</h2>
+            <p className="text-sm text-gray-500">作者：{book.author}</p>
+          </div>
+        )}
+
+        {/* Chapter Info */}
+        <div className="px-4 py-2 bg-gray-50 border-b">
+          <p className="text-sm text-gray-600">現正播放：第1節</p>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="px-4 py-2">
+          <input
+            type="range"
+            value={currentTime}
+            min={0}
+            max={duration || 100}
+            step={1}
+            onChange={handleSliderChange}
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+          />
+          <div className="flex justify-between text-sm text-gray-500 mt-1">
+            <span>{formatTime(currentTime)}</span>
+            <span>{formatTime(duration)}</span>
           </div>
         </div>
 
-        {/* Comments Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            <MessageSquare className="w-5 h-5" />
-            評論
-          </h3>
+        {/* Controls */}
+        <div className="p-4 flex items-center justify-between">
+          <button
+            onClick={handlePlaybackRateChange}
+            className="px-2 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200 text-gray-600"
+          >
+            {playbackRate}x
+          </button>
 
-          {/* Add Comment */}
-          <div className="flex gap-2 mb-6">
-            <input
-              type="text"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="寫下你的評論..."
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+          <div className="flex items-center gap-4">
+            <button className="text-gray-600 hover:text-gray-800">
+              <SkipBack className="w-6 h-6" />
+            </button>
             <button
-              onClick={addComment}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              onClick={togglePlay}
+              className="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center hover:bg-blue-600"
             >
-              發送
+              {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
+            </button>
+            <button className="text-gray-600 hover:text-gray-800">
+              <SkipForward className="w-6 h-6" />
             </button>
           </div>
 
-          {/* Comments List */}
-          <div className="space-y-4">
-            {comments.map((comment) => (
-              <div key={comment.id} className="flex gap-3">
-                <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
-                  <img src={comment.avatar} alt={comment.user} className="w-full h-full object-cover" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">{comment.user}</span>
-                    <span className="text-sm text-gray-500">{comment.timestamp}</span>
+          <button
+            onClick={() => setIsFavorite(!isFavorite)}
+            className={`text-gray-600 hover:text-red-500 ${isFavorite ? "text-red-500" : ""}`}
+          >
+            <Heart className="w-6 h-6" fill={isFavorite ? "currentColor" : "none"} />
+          </button>
+        </div>
+
+        {/* Comments Section */}
+        <div className="border-t">
+          <div className="p-4">
+            <h3 className="text-lg font-semibold mb-4">評論</h3>
+
+            {/* Add Comment */}
+            <div className="flex gap-2 mb-6">
+              <input
+                type="text"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="寫下你的評論..."
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                onClick={addComment}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+              >
+                發送
+              </button>
+            </div>
+
+            {/* Comments List */}
+            <div className="space-y-4">
+              {comments.map((comment) => (
+                <div key={comment.id} className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
+                    <img src={comment.avatar} alt={comment.user} className="w-full h-full object-cover" />
                   </div>
-                  <p className="text-gray-700">{comment.content}</p>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{comment.user}</span>
+                      <span className="text-sm text-gray-500">{comment.timestamp}</span>
+                    </div>
+                    <p className="text-gray-700">{comment.content}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

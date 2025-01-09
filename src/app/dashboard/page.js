@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, Search, User2, X, ChevronRight, BookOpen } from "lucide-react";
 
 export default function DashboardPage() {
@@ -10,15 +11,65 @@ export default function DashboardPage() {
   const totalSlides = 3;
 
   const hotBooks = [
-    { title: "人工智能革命", author: "李明", color: "bg-cyan-300" },
-    { title: "數據科學入門", author: "張華", color: "bg-purple-300" },
-    { title: "區塊鏈技術", author: "王強", color: "bg-yellow-300" },
+    {
+      id: 1,
+      title: "水滸傳",
+      author: "金庸",
+      preview: "《水滸傳》，是以官話白話文寫成的章回小說，列為中國古典四大文學名著之一，六才子書之一...",
+      cover: "https://cdn.readmoo.com/cover/8d/6c98l67_460x580.jpg",
+    },
+    {
+      id: 2,
+      title: "傲慢與偏見",
+      author: "珍·奧斯汀",
+      preview: "這部經典小說探討了愛情、婚姻、道德、教育等主題...",
+      cover: "https://s.eslite.com/upload/product/o/2680416845006/ec327725.jpg",
+    },
+    {
+      id: 3,
+      title: "簡愛",
+      author: "夏洛蒂·勃朗特",
+      preview: "一個孤兒女子追求愛情與獨立的動人故事...",
+      cover: "https://imageproxy.pixnet.cc/imgproxy?url=https://pic.pimg.tw/heero/bf520dcbda8e9b34c03e4da9692a36f1.jpg",
+    },
+    {
+      id: 4,
+      title: "如有雷同實屬不幸",
+      author: "藍橘子",
+      preview: "一個心理諮詢師，一隻導盲犬，一對自以為天生一對的情侶…",
+      cover: "https://cdn.readmoo.com/share/cover/hb/bhlloed_460x580.jpg?t=1657770939",
+    },
   ];
 
   const recommendedBooks = [
-    { title: "未來簡史", author: "尤瓦爾·赫拉利", color: "bg-orange-200" },
-    { title: "思考，快與慢", author: "丹尼爾·卡尼曼", color: "bg-green-200" },
-    { title: "原子習慣", author: "詹姆斯·克利爾", color: "bg-pink-200" },
+    {
+      id: 5,
+      title: "記憶管理局",
+      author: "冒業",
+      preview: "零犯罪率都市陷入空前危機尖端科技 vs. 原始情感的激烈衝突自此，「記憶管理局」就是敵人！",
+      cover: "https://cdn.readmoo.com/cover/a8/9fcci54_460x580.jpg?v=1735262983",
+    },
+    {
+      id: 6,
+      title: "變形記",
+      author: "法蘭茨·卡夫卡",
+      preview: "一個人變成巨大昆蟲後的超現實故事...",
+      cover: "https://www.hkreadingcity.net/sites/default/redirect/getCover.php?file=12170_cover.jpg",
+    },
+    {
+      id: 7,
+      title: "羅密歐與朱麗葉",
+      author: "威廉·莎士比亞",
+      preview: "一個關於愛情與命運的永恆悲劇...",
+      cover: "https://upload.wikimedia.org/wikipedia/zh/b/b4/William_shakespeares_romeo_and_juliet_movie_poster.jpg",
+    },
+    {
+      id: 8,
+      title: "戰爭與和平",
+      author: "列夫·托爾斯泰",
+      preview: "這部史詩般的作品描繪了拿破崙戰爭期間的俄羅斯社會...",
+      cover: "https://i1.momoshop.com.tw/1692982928/goodsimg/0008/543/247/8543247_O_m.webp",
+    },
   ];
 
   return (
@@ -35,10 +86,10 @@ export default function DashboardPage() {
         </Link>
 
         <Link
-          className="absolute top-4 right-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-300"
-          href={"/"}
+          href="/"
+          className="absolute top-4 right-4 text-gray-600 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-full hover:text-gray-800 transition-all duration-300"
         >
-          登出
+          Logout
         </Link>
 
         {/* Search Bar */}
@@ -85,20 +136,23 @@ export default function DashboardPage() {
       <div className="p-4 space-y-6">
         {/* Hot Section */}
         <div>
-          <h2 className="text-base font-medium mb-3">熱門</h2>
-          <div className="grid grid-cols-3 gap-3">
-            {hotBooks.map((book, i) => (
-              <div
-                key={i}
-                className={`aspect-square ${book.color} rounded-lg p-3 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer`}
-              >
-                <div className="text-sm font-medium text-gray-800">{book.title}</div>
-                <div className="text-xs text-gray-600">{book.author}</div>
-              </div>
+          <h2 className="font-semibold mb-3 text-3xl text-center">熱門</h2>
+          <div className="grid grid-cols-4 gap-3">
+            {hotBooks.map((book) => (
+              <Link href={`/book/${book.id}`} key={book.id}>
+                <div className="relative group aspect-[3/4] rounded-lg overflow-hidden cursor-pointer">
+                  <Image src={book.cover} alt={book.title} fill className="object-cover" />
+                  <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col">
+                    <h3 className="text-white font-semibold mb-2">{book.title}</h3>
+                    <p className="text-gray-300 text-sm mb-2">{book.author}</p>
+                    <p className="text-gray-400 text-xs line-clamp-3">{book.preview}</p>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
           <div className="flex justify-center gap-1 mt-3">
-            {[...Array(3)].map((_, i) => (
+            {[...Array(4)].map((_, i) => (
               <button key={i} className="w-1.5 h-1.5 rounded-full bg-gray-300" />
             ))}
           </div>
@@ -106,20 +160,23 @@ export default function DashboardPage() {
 
         {/* Recommended Books Section */}
         <div>
-          <h2 className="text-base font-medium mb-3">推薦書籍</h2>
-          <div className="grid grid-cols-3 gap-3">
-            {recommendedBooks.map((book, i) => (
-              <div
-                key={i}
-                className={`aspect-[3/4] ${book.color} rounded-lg p-3 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer`}
-              >
-                <div className="text-sm font-medium text-gray-800">{book.title}</div>
-                <div className="text-xs text-gray-600">{book.author}</div>
-              </div>
+          <h2 className="font-semibold mb-3 text-3xl text-center">推薦書籍</h2>
+          <div className="grid grid-cols-4 gap-3">
+            {recommendedBooks.map((book) => (
+              <Link href={`/book/${book.id}`} key={book.id}>
+                <div className="relative group aspect-[3/4] rounded-lg overflow-hidden cursor-pointer">
+                  <Image src={book.cover} alt={book.title} fill className="object-cover" />
+                  <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col">
+                    <h3 className="text-white font-semibold mb-2">{book.title}</h3>
+                    <p className="text-gray-300 text-sm mb-2">{book.author}</p>
+                    <p className="text-gray-400 text-xs line-clamp-3">{book.preview}</p>
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
           <div className="flex justify-center gap-1 mt-3">
-            {[...Array(3)].map((_, i) => (
+            {[...Array(4)].map((_, i) => (
               <button key={i} className="w-1.5 h-1.5 rounded-full bg-gray-300" />
             ))}
           </div>
