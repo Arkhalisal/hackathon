@@ -8,7 +8,7 @@ export function ChapterSelection({ chapters, selectedChapter, onSelectChapter, i
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-2 text-left bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        className="w-full px-4 py-2 text-left bg-white border border-gray-300 text-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
       >
         第 {selectedChapter} 章 {chapters.find((chapter) => chapter.number === selectedChapter).title}
         <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2" />
