@@ -17,15 +17,15 @@ export default function VoiceBookPage() {
     {
       id: 1,
       user: "Alice",
-      avatar: "/placeholder.svg?height=32&width=32",
-      content: "這本有聲書真的很棒！",
+      avatar: "/image/hermione.png",
+      content: "這本書真的很棒！推薦大家閱讀。",
       timestamp: "2024-01-09 14:30",
     },
     {
       id: 2,
       user: "Bob",
-      avatar: "/placeholder.svg?height=32&width=32",
-      content: "朗讀者的聲音很舒服",
+      avatar: "/image/lamFace.png",
+      content: "內容非常精彩，值得一讀。",
       timestamp: "2024-01-09 15:45",
     },
   ]);
@@ -267,8 +267,8 @@ export default function VoiceBookPage() {
     if (newComment.trim()) {
       const comment = {
         id: comments.length + 1,
-        user: "User",
-        avatar: "/placeholder.svg?height=32&width=32",
+        user: "You",
+        avatar: "/image/lamFace2.png",
         content: newComment,
         timestamp: new Date().toLocaleString(),
       };
@@ -288,7 +288,12 @@ export default function VoiceBookPage() {
           返回
         </Link>
         {/* Audio Player */}
-        <audio ref={audioRef} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleLoadedMetadata} src="/demo.mp3" />
+        <audio
+          ref={audioRef}
+          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={handleLoadedMetadata}
+          src="/voice-book/demo.mp3"
+        />
 
         {/* Book Info */}
         {book && (

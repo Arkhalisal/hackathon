@@ -234,7 +234,7 @@ export default function AllBooksPage() {
                 <h3 className="text-white font-semibold mb-2">{book.title}</h3>
                 <p className="text-gray-300 text-sm mb-2">{book.author}</p>
                 <p className="text-gray-400 text-xs line-clamp-3">{book.preview}</p>
-                <div className="mt-auto flex flex-wrap gap-1">
+                <div className="mt-auto mb-6 flex flex-wrap gap-1">
                   {book.tags.map((tag) => (
                     <span key={tag} className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded-full">
                       {tag}

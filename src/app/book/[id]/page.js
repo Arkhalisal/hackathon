@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Heart, MessageSquare, Headphones } from "lucide-react";
+import { ArrowLeft, Heart, MessageSquare } from "lucide-react";
 import { ChapterSelection } from "./ChapterSelection";
 
 export default function BookPage() {
@@ -16,14 +16,14 @@ export default function BookPage() {
     {
       id: 1,
       user: "Alice",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/image/hermione.png",
       content: "這本書真的很棒！推薦大家閱讀。",
       timestamp: "2024-01-09 14:30",
     },
     {
       id: 2,
       user: "Bob",
-      avatar: "/placeholder.svg?height=32&width=32",
+      avatar: "/image/lamFace.png",
       content: "內容非常精彩，值得一讀。",
       timestamp: "2024-01-09 15:45",
     },
@@ -201,8 +201,8 @@ export default function BookPage() {
     if (newComment.trim()) {
       const comment = {
         id: comments.length + 1,
-        user: "User",
-        avatar: "/placeholder.svg?height=32&width=32",
+        user: "You",
+        avatar: "/image/lamFace2.png",
         content: newComment,
         timestamp: new Date().toLocaleString(),
       };
@@ -315,7 +315,13 @@ export default function BookPage() {
             {comments.map((comment) => (
               <div key={comment.id} className="flex gap-3">
                 <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
-                  <img src={comment.avatar} alt={comment.user} className="w-full h-full object-cover" />
+                  <Image
+                    src={comment.avatar}
+                    alt={comment.user}
+                    className="w-full h-full object-cover"
+                    width={32}
+                    height={32}
+                  />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
